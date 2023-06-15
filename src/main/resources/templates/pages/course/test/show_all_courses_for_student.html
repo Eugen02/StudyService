@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Courses | StudyService</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="stylesheet" href="/css/fontello.css"/>
+</head>
+<body>
+
+<div class="container-fluid ">
+
+    <div th:replace="~{pages/user/welcome_page :: header(${user})}"></div>
+    <div class="row main-custom">
+        <div class="col-lg-2 left-menu-welcome">
+            <div sec:authorize="hasRole('STUDENT')">
+                <div class="first-welcome-left-button">
+                    fhg
+                </div>
+                <div class="div-first-btn-true first-div">
+                    <a class=" left-menu-welcome-button" th:href="@{/dashboard_student}"><i
+                            class="icon-tasks ico-main-menu" style="color: white"></i>Results</a>
+                </div>
+                <div class="div-first-btn-true">
+                    <a class=" left-menu-welcome-button" th:href="@{/show_all_courses_for_student}"><i
+                            class="icon-graduation-cap ico-main-menu" style="color: white"></i>All courses</a>
+                </div>
+                <div class="div-first-btn-true">
+                    <a class=" left-menu-welcome-button" th:href="@{/show_my_group}"><i
+                            class="icon-users ico-main-menu" style="color: white"></i>My group</a>
+                </div>
+                <div class="div-first-btn-true">
+                    <a class=" left-menu-welcome-button return-button"
+                       th:href="@{/welcome}"><i
+                            class="icon-left-thin ico-main-menu" style="color: white"></i>Return</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-10 right-welcome-custom-menu">
+            <div style="margin: 10px 10px 10px 10px; border: #DEDEDE 1px solid; border-radius: 0.25rem; background: white">
+                <h2 style="margin-left: 5px; margin-top: 2px; margin-bottom: 3px; ">Results</h2>
+                <table class="table table-striped">
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Teacher</th>
+                        <th>Show course</th>
+                    </tr>
+
+                    <tr th:each="course : ${allCourses}">
+
+                        <td style="width: 340px"><img th:src="'http://localhost:8000' +${course.linkPage}" style="width: 340px; height: 150px" alt=""></td>
+                        <td><p th:text="${course.name}">Show course</p></td>
+
+                        <td style="width: 450px"><p th:text="${course.description}">Show course</p></td>
+                        <td>
+                            <p th:text="${course.teacher.userTeacher.firstName} + ' ' + ${course.teacher.userTeacher.middleName}"/>
+                        </td>
+                        <td> <a style="margin-top: 20%" th:href="@{/get_course_view_student/{id} (id = ${course.id})}"
+                                class="btn btn-primary change-color-button" th:text="'Show course'"/></td>
+
+
+                    </tr>
+                </table>
+
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</body>
+</html>

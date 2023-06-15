@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+
+    </style>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="stylesheet" href="/css/fontello.css"/>
+
+</head>
+<body>
+<div class="container-fluid ">
+    <div th:replace="~{pages/user/welcome_page :: header(${user})}"></div>
+    <div class="row main-custom">
+        <div class="col-lg-2 left-menu-welcome">
+            <div sec:authorize="hasRole('TEACHER')">
+                <div class="first-welcome-left-button"> s</div>
+
+                <div class="div-first-btn-true first-div">
+                    <a class=" left-menu-welcome-button" th:href="@{/show_info_courses}"><i
+                            class="icon-graduation-cap ico-main-menu" style="color: white"></i>Show courses</a>
+                </div>
+                <div class="div-first-btn-true ">
+                    <a class=" left-menu-welcome-button" th:href="@{/analise}">
+                        <i class="icon-chart-bar ico-main-menu" style="color: white"></i>Analysis</a>
+                </div>
+                <div class="div-first-btn-true ">
+                    <a class=" left-menu-welcome-button" th:href="@{/statics}">
+                        <i class="icon-tasks ico-main-menu" style="color: white"></i>Statistics</a>
+                </div>
+                <div class="div-first-btn-true">
+                    <a class=" left-menu-welcome-button return-button" th:href="@{/welcome}"><i
+                            class="icon-left-thin ico-main-menu" style="color: white"></i>Return</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-10 right-welcome-custom-menu">
+            <div style="margin: 10px 10px 10px 10px; border: #DEDEDE 1px solid; border-radius: 0.25rem; background: white">
+                <div class="head-course">
+                    <h2 style="margin-left: 10px; margin-top: 5px" th:text="'Test name: '+${testID.name}"></h2>
+                </div>
+                <hr style=" margin-top: 15px; margin-bottom: 15px">
+                <div th:each="singleQuest, itemStat: ${testTake.completeTest}">
+                    <form id="main_form" th:method="POST"
+                          th:action="@{/update_new_quest/{id} (id = ${singleQuest.quest.id})}"
+                          th:object="${testTake}">
+
+
+                        <div style="border-radius: 0.25rem; border: #DEDEDE 1px solid; margin: 5px 10px 5px 10px">
+                            <p style="margin-top: 10px; margin-left: 10px"
+                               th:text="'Quest '+${itemStat.count}+ '. ' +${singleQuest.quest.description}"></p>
+                            <hr style="margin-top: 4px; margin-bottom: 4px">
+                            <p style="margin-left: 5px; margin-top: 5px"
+                               th:text="'A. ' +${singleQuest.answerFalse1.answer}"></p>
+                            <p style="margin-left: 5px; margin-top: 5px"
+                               th:text="'B. ' +${singleQuest.answerFalse2.answer}"></p>
+                            <p style="margin-left: 5px; margin-top: 5px"
+                               th:text="'C. ' +${singleQuest.answerFalse3.answer}"></p>
+                            <p style="margin-left: 5px; margin-top: 5px"
+                               th:text="'D. ' +${singleQuest.answerTrue.answer}"></p>
+                            <hr style="margin-top: 4px; margin-bottom: 4px">
+                            <div class="row">
+                                <div class="col-2" style="display:flex; justify-content: center; margin-left: 26vh">
+                                    <label style="color: green" th:if="${singleQuest.answerFalse1.isTrue == 1}"
+                                           th:for="'f1' + ${itemStat.count}">A.(Correct answer)
+                                    </label>
+                                    <label th:th:unless="${singleQuest.answerFalse1.isTrue == 1}"
+                                           th:for="'f1' + ${itemStat.count}">A.</label>
+                                    <input class="input-chechbox form-check-input" th:id="'f1' + ${itemStat.count}"
+                                           type="radio"
+                                           th:field="${testTake.completeTest[__${itemStat.index}__].resultAnswerId}"
+                                           th:value="${singleQuest.answerFalse1.id}"/>
+                                </div>
+
+                                <div class="col-2" style="display:flex; justify-content: center; ">
+                                    <label style="color: green" th:if="${singleQuest.answerFalse2.isTrue == 1}"
+                                           th:for="'f2' + ${itemStat.count}">B.(Correct answer)</label>
+                                    <label th:th:unless="${singleQuest.answerFalse2.isTrue == 1}"
+                                           th:for="'f2' + ${itemStat.count}">B.</label>
+                                    <input class="input-chechbox form-check-input" th:id="'f2' + ${itemStat.count}"
+                                           type="radio"
+                                           th:field="${testTake.completeTest[__${itemStat.index}__].resultAnswerId}"
+                                           th:value="${singleQuest.answerFalse2.id}"/>
+
+                                </div>
+                                <div class="col-2" style="display:flex; justify-content: center">
+                                    <label style="color: green" th:if="${singleQuest.answerFalse3.isTrue == 1}"
+                                           th:for="'f3' + ${itemStat.count}">C.(Correct answer)
+                                    </label>
+                                    <label th:th:unless="${singleQuest.answerFalse3.isTrue == 1}"
+                                           th:for="'f3' + ${itemStat.count}">C.</label>
+                                    <input class="input-chechbox form-check-input" th:id="'f3' + ${itemStat.count}"
+                                           type="radio"
+                                           th:field="${testTake.completeTest[__${itemStat.index}__].resultAnswerId}"
+                                           th:value="${singleQuest.answerFalse3.id}"/>
+
+                                </div>
+                                <div class="col-2" style="display:flex; justify-content: center">
+                                    <label style="color: green" th:if="${singleQuest.answerTrue.isTrue == 1}"
+                                           th:for="'f4' + ${itemStat.count}">D.(Correct answer)
+                                    </label>
+                                    <label th:th:unless="${singleQuest.answerTrue.isTrue == 1}"
+                                           th:for="'f4' + ${itemStat.count}">D.</label>
+                                    <input class="input-chechbox form-check-input" th:id="'f4' + ${itemStat.count}"
+                                           type="radio"
+                                           th:field="${testTake.completeTest[__${itemStat.index}__].resultAnswerId}"
+                                           th:value="${singleQuest.answerTrue.id}"/>
+                                </div>
+                            </div>
+                            <div style="display:flex; justify-content: center">
+                                <button style="margin-bottom: 10px; margin-top: 10px"
+                                        data-bs-target="#removeSetStockQuantityModal"
+                                        id="edit_course_data" type="button"
+                                        class="btn btn-primary change-color-button"
+                                        data-bs-toggle="modal" th:attrappend="data-bs-target=${singleQuest.quest.id}">
+                                    Edit quest
+                                </button>
+                            </div>
+                        </div>
+
+
+                        <div class="modal fade" id="removeSetStockQuantityModal" tabindex="-1"
+                             aria-labelledby="exampleModalLabel"
+                             aria-hidden="true"
+                             th:attrappend="id=${singleQuest.quest.id}">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Edit Quest: <span
+                                                th:text="${itemStat.count} + '.'"></span></h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+
+                                    <div class="modal-body">
+
+                                        <label class="fw-bold" for="q1"
+                                               th:text="'Quest = ' + ${singleQuest.quest.description}"></label>
+                                        <input class="form-control"
+                                                id="q1" type="text"
+                                               th:onblur="if(value=='') value = '[(${singleQuest.quest.description})]'"
+                                               th:onfocus="if(value == '[(${singleQuest.quest.description})]') value ='' "
+                                               th:value="${singleQuest.quest.description}"
+                                               th:name="newCompleteTestTT.quest.description">
+                                        <input type="text" th:value="${singleQuest.quest.id}"
+                                               th:name="newCompleteTestTT.quest.id"
+
+                                               style="display: none">
+                                        <hr style="margin-left: 10px; margin-right: 10px">
+                                        <label for="a11" th:if="${singleQuest.answerFalse1.isTrue == 1}" style="color: green"
+                                               th:text="'Answer (True) = ' + ${singleQuest.answerFalse1.answer}"></label>
+                                        <label for="a11" th:unless="${singleQuest.answerFalse1.isTrue == 1}"
+                                               th:text="'Answer (False) = ' + ${singleQuest.answerFalse1.answer}"></label>
+
+                                        <input class="form-control" id="a11" type="text"
+                                               th:onblur="if(value=='') value = '[(${singleQuest.answerFalse1.answer})]'"
+                                               th:onfocus="if(value == '[(${singleQuest.answerFalse1.answer})]') value ='' "
+
+                                               th:value="${singleQuest.answerFalse1.answer}"
+                                               th:name="newCompleteTestTT.answerFalse1.answer">
+                                        <input class="form-control" type="text" th:value="${singleQuest.answerFalse1.id}"
+                                               th:name="newCompleteTestTT.answerFalse1.id"
+                                               style="display: none">
+                                        <br>
+
+                                        <label for="a21" th:if="${singleQuest.answerFalse2.isTrue == 1}" style="color: green"
+                                               th:text="'Answer (True) = ' + ${singleQuest.answerFalse2.answer}"></label>
+                                        <label for="a21" th:unless="${singleQuest.answerFalse2.isTrue == 1}"
+                                               th:text="'Answer (False) = ' + ${singleQuest.answerFalse2.answer}"></label>
+                                        <input class="form-control" id="a21" type="text"
+                                               th:onblur="if(value=='') value = '[(${singleQuest.answerFalse2.answer})]'"
+                                               th:onfocus="if(value == '[(${singleQuest.answerFalse2.answer})]') value ='' "
+
+                                               th:value="${singleQuest.answerFalse2.answer}"
+                                               th:name="newCompleteTestTT.answerFalse2.answer">
+                                        <input class="form-control" type="text" th:value="${singleQuest.answerFalse2.id}"
+                                               th:name="newCompleteTestTT.answerFalse2.id"
+
+                                               style="display: none">
+                                        <br>
+
+
+                                        <label for="a31" th:if="${singleQuest.answerFalse3.isTrue == 1}" style="color: green"
+                                               th:text="'Answer (True) = ' + ${singleQuest.answerFalse3.answer}"></label>
+                                        <label for="a31" th:unless="${singleQuest.answerFalse3.isTrue == 1}"
+                                               th:text="'Answer (False) = ' + ${singleQuest.answerFalse3.answer}"></label>
+                                        <input class="form-control" id="a31" type="text"
+                                               th:onblur="if(value=='') value = '[(${singleQuest.answerFalse3.answer})]'"
+                                               th:onfocus="if(value == '[(${singleQuest.answerFalse3.answer})]') value ='' "
+
+                                               th:value="${singleQuest.answerFalse3.answer}"
+                                               th:name="newCompleteTestTT.answerFalse3.answer">
+                                        <input class="form-control" type="text"
+                                               th:value="${singleQuest.answerFalse3.id}"
+                                               th:name="newCompleteTestTT.answerFalse3.id"
+                                               style="display: none">
+                                        <br>
+
+                                        <label for="a41" th:if="${singleQuest.answerTrue.isTrue == 1}" style="color: green"
+                                               th:text="'Answer (True) = ' + ${singleQuest.answerTrue.answer}"></label>
+                                        <label for="a41" th:unless="${singleQuest.answerTrue.isTrue == 1}"
+                                               th:text="'Answer (False) = ' + ${singleQuest.answerTrue.answer}"></label>
+                                        <input class="form-control" id="a41" type="text"
+                                               th:onblur="if(value=='') value = '[(${singleQuest.answerTrue.answer})]'"
+                                               th:onfocus="if(value == '[(${singleQuest.answerTrue.answer})]') value ='' "
+
+                                               th:value="${singleQuest.answerTrue.answer}"
+                                               th:name="newCompleteTestTT.answerTrue.answer">
+                                        <input class="form-control" type="text" th:value="${singleQuest.answerTrue.id}"
+                                               th:name="newCompleteTestTT.answerTrue.id"
+
+                                               style="display: none">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                                        </button>
+                                        <button type="submit" class="btn btn-primary change-color-button">Save changes
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+
+                </div>
+                <div style="display: flex; justify-content: center">
+                <a class="btn btn-primary change-color-button" style="margin-top: 20px; margin-bottom: 20px" th:href="@{/welcome}">Confirm</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</body>
+</html>
+
+<script>
+    const inputCB = document.getElementsByClassName("input-chechbox");
+    const closeButtons = document.getElementsByClassName("c-bt-close");
+
+    for (let i = 0; i < inputCB.length; i++) {
+        inputCB[i].checked = false;
+        inputCB[i].disabled = true;
+    }
+
+
+</script>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование курса</title>
+
+    <style>
+        .center-img {
+            display: block;
+            margin: 0 auto;
+            height: 200px;
+        }
+    </style>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="stylesheet" href="/css/fontello.css"/>
+</head>
+<body>
+<div class="container-fluid ">
+    <div th:replace="~{pages/user/welcome_page :: header(${user})}"></div>
+    <div class="row main-custom">
+
+        <div class="col-lg-2 left-menu-welcome">
+            <div sec:authorize="hasRole('TEACHER')">
+                <div class="first-welcome-left-button"> s</div>
+
+                <div class="div-first-btn-true first-div">
+                    <a class=" left-menu-welcome-button" th:href="@{/show_info_courses}"><i
+                            class="icon-graduation-cap ico-main-menu" style="color: white"></i>Show courses</a>
+                </div>
+                <div class="div-first-btn-true ">
+                    <a class=" left-menu-welcome-button" th:href="@{/analise}">
+                        <i class="icon-chart-bar ico-main-menu" style="color: white"></i>Analysis</a>
+                </div>
+                <div class="div-first-btn-true ">
+                    <a class=" left-menu-welcome-button" th:href="@{/statics}">
+                        <i class="icon-tasks ico-main-menu" style="color: white"></i>Statistics</a>
+                </div>
+                <div class="div-first-btn-true">
+                    <a class=" left-menu-welcome-button return-button" th:href="@{/welcome}"><i
+                            class="icon-left-thin ico-main-menu" style="color: white"></i>Return</a>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-lg-10 right-welcome-custom-menu">
+            <div style="margin: 10px 10px 10px 10px; border: #DEDEDE 1px solid; border-radius: 0.25rem; background: white">
+                <div class="head-course">
+                    <p style="margin-left: 10px; margin-top: 5px" th:text="'Course name: '+${course.name}"></p>
+                    <p style="margin-left: 10px; margin-top: 5px">Description</p>
+                    <p style="margin-left: 10px; margin-top: 5px" th:text="${course.description}"></p>
+                </div>
+
+                <hr style=" margin-top: 15px; margin-bottom: 15px">
+                <div class="row">
+                    <div class="col-6">
+                        <button style="margin-left: 70%" data-bs-target="#removeSetStockQuantityModal"
+                                id="edit_course_data" type="button"
+                                class="btn btn-primary change-color-button"
+                                data-bs-toggle="modal" th:attrappend="data-bs-target='firstModal'">
+                            Edit course data
+                        </button>
+                    </div>
+                    <div class="col-6">
+                        <button data-bs-target="#create_block_course" id="create_block" type="button"
+                                class="btn btn-primary change-color-button"
+                                data-bs-toggle="modal"
+                                th:attrappend="data-bs-target='secondModal'">
+                            Add new course block
+                        </button>
+                    </div>
+                </div>
+                <hr style=" margin-top: 15px; margin-bottom: 15px">
+
+                <div class="class-block" th:each="courseBlock, itemStat: ${courseBlocks}">
+                    <p class="fw-bolder" style="margin-left: 2px; margin-top: 2px"
+                       th:text="${itemStat.count}+ '. ' +${courseBlock.nameBlock}"/>
+                    <p class="fw-bolder" style="margin-top: 2px; margin-left: 2px"
+                       th:text="'Description: ' +${courseBlock.description}"></p>
+                    <hr style="margin-top: 5px; margin-bottom: 5px">
+                    <form th:method="DELETE" th:action="@{/course_block_remove/{id}(id=${courseBlock.id})}">
+                        <input style="margin-left: 10px" class="btn btn-primary change-color-button"
+                               id="course_block_remove" type="submit"
+                               value="Remove course block"/>
+                    </form>
+                    <hr style="margin-top: 5px; margin-bottom: 5px">
+                    <br>
+                    <div style="border-radius: 0.25rem; border: #DEDEDE 1px solid; margin: 5px 10px 5px 10px">
+                        <a style="margin-top:10px; margin-bottom: 10px; margin-left: 10px"
+                           class="btn btn-primary change-color-button"
+                           th:href="@{/create_lecture_material/{id} (id=${courseBlock.id})}"
+                           role="button">Add new lecture material</a>
+                        <p style="margin-left: 10px">Lectures</p>
+                        <hr style="margin-left: 10px; margin-right: 10px">
+                        <div th:each="lectureMaterial: ${courseBlock.lectureMaterials}">
+                            <table>
+                                <tr style="margin-top: 6px; margin-right: 6px">
+                                    <td style="width: 75vh"><p class="icon-book"
+                                                               style="margin-left: 10px; margin-right: 10px; margin-top: 15px;  margin-bottom: 10px">
+                                        [[${lectureMaterial.name}]]</p></td>
+                                    <td><a style="margin-left: 10px; margin-right: 10px;"
+                                           class="btn btn-primary change-color-button"
+                                           th:href="@{/lecture_material/{id} (id=${lectureMaterial.id})}"
+                                           role="button" th:text="'View'"></a></td>
+                                    <td><a style="margin-left: 10px; margin-right: 10px;"
+                                           class="btn btn-primary change-color-button"
+                                           th:href="@{/lecture_material_edit/{id} (id=${lectureMaterial.id})}"
+                                           role="button" th:text="'Edit'"></a></td>
+                                    <td>
+                                        <form th:method="DELETE"
+                                              th:action="@{/lectureMaterial_remove/{id}(id=${lectureMaterial.id})}">
+                                            <input style="margin-left: 10px; margin-right: 10px;"
+                                                   class="btn btn-primary change-color-button" type="submit"
+                                                   value="Remove"/>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <hr>
+
+                        <a style="margin-top:10px; margin-bottom: 10px; margin-left: 10px"
+                           class="btn btn-primary change-color-button"
+                           th:href="@{/create_test/{id} (id=${courseBlock.id})}"
+                           role="button">Add new test</a>
+                        <p style="margin-left: 10px">Tests</p>
+                        <hr style="margin-left: 10px; margin-right: 10px">
+                        <div th:each="test: ${courseBlock.tests}">
+                            <table>
+                                <tr style="margin-top: 6px; margin-right: 6px">
+                                    <td style="width: 75vh"><p class="icon-pencil"
+                                                               style="margin-left: 10px; margin-right: 10px; margin-top: 15px;  margin-bottom: 10px">
+                                        [[${test.name}]]</p></td>
+                                    <td><a style="margin-left: 10px; margin-right: 10px;" id="test_name" class="btn btn-primary change-color-button"
+                                           th:href="@{/test_start/{id} (id = ${test.id})}"
+                                           role="button">Tryout test</a></td>
+                                    <td><a style="margin-left: 10px; margin-right: 10px;" id="test_name1" class="btn btn-primary change-color-button"
+                                           th:href="@{/test_edit/{id} (id=${test.id})}"
+                                           role="button">Edit</a></td>
+                                    <td>
+                                        <form th:method="DELETE" th:action="@{/test_remove/{id}(id=${test.id})}">
+                                            <input style="margin-left: 10px; margin-right: 10px;" class="btn btn-primary change-color-button" type="submit"
+                                                   value="Remove"/>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="create_block_course" tabindex="-1" aria-labelledby="exampleModalLabel"
+             aria-hidden="true"
+             th:attrappend="id='secondModal'">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Create course block</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form th:method="POST" th:action="@{/create_new_course_block/{id} (id=${course.id})}"
+                          th:object="${newCourseBlock}">
+                        <div class="modal-body">
+                            <div>
+                                <label style="margin-top: 20px" for="nameCourse">Course name</label>
+                                <input class="form-control" type="text" id="nameCourse" th:field="${newCourseBlock.nameBlock}">
+                            </div>
+                            <div>
+                                <label style="margin-top: 15px" for="description">Description</label>
+                                <textarea class="form-control" style="margin-bottom: 20px" type="text" id="description"
+                                          th:field="${newCourseBlock.description}"> </textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary change-color-button">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="removeSetStockQuantityModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+             aria-hidden="true" th:attrappend="id='firstModal'">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="edit_course_dataLabel">Course info</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="change_data_course" th:method="POST"
+                              th:action="@{/edit_course_data/{id} (id=${course.id})}"
+                              th:object="${newCourseData}">
+                            <div>
+                                <label style="margin-top: 20px" for="newCourseDataName"> Name </label>
+                                <input class="form-control" id="newCourseDataName" type="text"
+                                       th:onblur="if(value=='') value = '[(${course.name})]'"
+                                       th:onfocus="if(value == '[(${course.name})]') value ='' "
+                                       th:value="${course.name}"
+                                       th:name="name">
+                            </div>
+                            <div>
+                                <label style="margin-top: 15px" for="newCourseDataDescription"> Description </label>
+                                <textarea class="form-control" id="newCourseDataDescription" type="text"
+                                          th:onblur="if(value=='') value = '[(${course.description})]'"
+                                          th:onfocus="if(value == '[(${course.description})]') value ='' "
+                                          th:placeholder="${course.description}"
+                                          th:name="description">[[${course.description}]] </textarea>
+                            </div>
+                            <div>
+                                <label style="margin-top: 15px" for="newCourseDataDescription"> Image </label>
+                                <img style="margin-bottom: 20px" th:src="'http://localhost:8000' +${course.linkPage}"
+                                     class="center-img">
+                            </div>
+                        </form>
+                        <br>
+                        <form id="change_photo" th:method="POST" th:action="@{/change_photo/{id} (id=${course.id})}"
+                              enctype="multipart/form-data">
+
+                            <label style="margin-top: 15px" for="file"
+                                   th:if="${course.linkPage == '/images/standart_course_image.png'}">Add
+                                image</label>
+                            <label style="margin-top: 15px" for="file"
+                                   th:unless="${course.linkPage == '/images/standart_course_image.png'}">Update
+                                image</label>
+                            <input class="form-control" id="file" type="file" name="file"/>
+
+                            <input style="margin-top: 15px" class="btn btn-primary change-color-button"
+                                   form="change_photo"
+                                   type="submit" value="Save">
+                        </form>
+                        <br>
+                        <form style="margin-top: 15px"
+                              th:unless="${course.linkPage == '/images/standart_course_image.png'}"
+                              id="remove_photo" th:method="POST" th:action="@{/remove_photo/{id} (id=${course.id})}">
+                            <input style="margin-bottom: 20px" class="btn btn-primary change-color-button"
+                                   form="remove_photo"
+                                   type="submit" value="Remove photo">
+                        </form>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button form="change_data_course" type="submit" class="btn btn-primary change-color-button">Save
+                            changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+</body>
+</html>
+

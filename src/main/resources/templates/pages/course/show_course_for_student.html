@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="stylesheet" href="/css/fontello.css"/>
+</head>
+<body>
+<div class="container-fluid ">
+    <div th:replace="~{pages/user/welcome_page :: header(${user})}"></div>
+    <div class="row main-custom">
+        <div class="col-lg-2 left-menu-welcome">
+
+            <div sec:authorize="hasRole('TEACHER')">
+                <div class="first-welcome-left-button"> s</div>
+
+                <div class="div-first-btn-true first-div">
+                    <a class=" left-menu-welcome-button" th:href="@{/show_info_courses}"><i
+                            class="icon-graduation-cap ico-main-menu" style="color: white"></i>Show courses</a>
+                </div>
+                <div class="div-first-btn-true ">
+                    <a class=" left-menu-welcome-button" th:href="@{/analise}">
+                        <i class="icon-chart-bar ico-main-menu" style="color: white"></i>Analysis</a>
+                </div>
+                <div class="div-first-btn-true ">
+                    <a class=" left-menu-welcome-button" th:href="@{/statics}">
+                        <i class="icon-tasks ico-main-menu" style="color: white"></i>Statistics</a>
+                </div>
+                <div class="div-first-btn-true">
+                    <a class=" left-menu-welcome-button return-button" th:href="@{/welcome}"><i
+                            class="icon-left-thin ico-main-menu" style="color: white"></i>Return</a>
+                </div>
+            </div>
+
+            <div sec:authorize="hasRole('STUDENT')">
+                <div class="first-welcome-left-button">
+                    fhg
+                </div>
+                <div class="div-first-btn-true first-div">
+                    <a class=" left-menu-welcome-button" th:href="@{/dashboard_student}"><i
+                            class="icon-tasks ico-main-menu" style="color: white"></i>Results</a>
+                </div>
+                <div class="div-first-btn-true">
+                    <a class=" left-menu-welcome-button" th:href="@{/show_all_courses_for_student}"><i
+                            class="icon-graduation-cap ico-main-menu" style="color: white"></i>All courses</a>
+                </div>
+                <div class="div-first-btn-true">
+                    <a class=" left-menu-welcome-button" th:href="@{/show_my_group}"><i
+                            class="icon-users ico-main-menu" style="color: white"></i>My group</a>
+                </div>
+                <div class="div-first-btn-true">
+                    <a class=" left-menu-welcome-button return-button" th:href="@{/welcome}"><i
+                            class="icon-left-thin ico-main-menu" style="color: white"></i>Return</a>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="col-lg-10 right-welcome-custom-menu">
+            <div style="margin: 10px 10px 10px 10px; border: #DEDEDE 1px solid; border-radius: 0.25rem ">
+                <div class="head-course">
+                    <p style="margin-left: 10px; margin-top: 5px" th:text="'Course name: '+${course.name}"></p>
+                    <p style="margin-left: 10px; margin-top: 5px">Description</p>
+                    <p style="margin-left: 10px; margin-top: 5px" th:text="${course.description}"></p>
+                </div>
+                <hr>
+                <div>
+                    <div class="class-block" th:each="courseBlock, itemStat: ${course.courseBlocks}" style="">
+                        <p class="fw-bolder" style="margin-left: 2px; margin-top: 2px"
+                           th:text="${itemStat.count}+ '. ' +${courseBlock.nameBlock}"></p>
+                        <p class="fw-bolder" style="margin-top: 2px; margin-left: 2px"
+                           th:text="'Description: ' +${courseBlock.description}"></p>
+                        <div th:if="${courseBlock.lectureMaterials.size != 0}"
+                             style="border-radius: 0.25rem; border: #DEDEDE 1px solid; margin: 5px 10px 5px 10px">
+                            <p style="margin-left: 10px">Lectures</p>
+                            <hr style="margin-left: 10px; margin-right: 10px">
+                            <div th:each="lectureMaterial: ${courseBlock.lectureMaterials}">
+                                <div class="row">
+                                    <div class="col-7">
+                                        <i class="icon-book"
+                                           style="margin-top: 3px; margin-left: 3px; margin-bottom: 5px"></i>
+                                        <a class="fw-bold"
+                                           style="color: #283753;     text-decoration: none; margin-top: 3px; margin-left: 3px; margin-bottom: 5px"
+                                           th:href="@{/lecture_material/{id} (id=${lectureMaterial.id})}"
+                                           role="button">[[${lectureMaterial.name}]]</a>
+                                    </div>
+                                    <div class="col-2">
+                                        <div th:each="rt : ${lectureMaterial.resultLectureMaterials}">
+                                            <div sec:authorize="hasRole('STUDENT')">
+                                                <div th:if="${rt.studentInResult.id == student.id}">
+                                                    <i class="icon-check"
+                                                       style="margin-top: 3px; margin-left: 3px; margin-bottom: 5px; color: green"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div th:if="${courseBlock.tests.size != 0}"
+                             style="border-radius: 0.25rem; border: #DEDEDE 1px solid; margin: 5px 10px 5px 10px">
+                            <p style="margin-left: 10px">Tests</p>
+                            <hr style="margin-left: 10px; margin-right: 10px">
+                            <div th:each="test: ${courseBlock.tests}">
+
+                                <div class="row">
+                                    <div class="col-7">
+                                        <i class="icon-pencil"
+                                           style="margin-top: 3px; margin-left: 3px; margin-bottom: 5px"></i>
+                                        <a class="fw-bold"
+                                           style="color: #283753;     text-decoration: none;  margin-top: 3px; margin-left: 3px; margin-bottom: 5px"
+                                           th:href="@{/test_show_info/{id} (id=${test.id})}"
+                                           role="button">[[${test.name}]]
+                                        </a>
+                                    </div>
+                                    <div class="col-2">
+                                        <div th:each="rt : ${test.resultTest}">
+                                            <div sec:authorize="hasRole('STUDENT')">
+                                                <div th:if="${rt.student.id == student.id}">
+                                                    <div class="row">
+                                                        <div class="col-1">
+                                                            <div th:if="${rt.testRating > 59 }">
+                                                                <i th:title="'Test passed with a positive score'"
+                                                                   class="icon-check"
+                                                                   style="margin-top: 3px; margin-left: 3px; margin-bottom: 5px; color: green"></i>
+                                                            </div>
+
+                                                            <div th:if="${rt.testRating < 60}">
+                                                                <i th:title="'Test failed'" class="icon-cancel"
+                                                                   style="margin-top: 3px; margin-left: 3px; margin-bottom: 5px; color: red"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-1">
+                                                            <div th:if="${rt.currentAttempt != 0}">
+                                                                <i th:title="'You have ' + ${rt.currentAttempt} + ' attempts left'"
+                                                                   class="icon-attention-alt"
+                                                                   style="margin-top: 3px; margin-left: 3px; margin-bottom: 5px; color: orange"></i>
+                                                            </div>
+                                                            <div th:if="${rt.currentAttempt == 0}">
+                                                                <i th:title="'You have 0 attempts'"
+                                                                   class="icon-attention-alt"
+                                                                   style="margin-top: 3px; margin-left: 3px; margin-bottom: 5px; color: red"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</body>
+</html>

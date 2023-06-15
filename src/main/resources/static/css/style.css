@@ -1,0 +1,183 @@
+body, html {
+    width: 100%;
+    height: 100%;
+    background: #F1F1F1;
+}
+
+.text-color {
+    color: white;
+    text-decoration: none;
+    padding-top: 18px;
+}
+
+.custom-class-home {
+    color: black;
+    display: flex;
+    justify-content: right;
+    padding: 13px;
+}
+
+.welcome-custom-button {
+    text-decoration: none;
+    color: white;
+    margin-right: 35px;
+}
+
+.custom-class-li {
+    color: black;
+    display: flex;
+    justify-content: left;
+}
+
+.header-custom {
+    position: sticky;
+    z-index: 3;
+    top: 0;
+    background: #1D2C45;
+}
+
+.custom-title {
+    padding-left: 3%;
+    padding-top: 10px;
+}
+
+.custom-course-list {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.img-card-custom {
+    width: 100%;
+    height: 216px;
+}
+
+.main-custom {
+    height: calc(100vh - 64px);
+}
+
+.class-description {
+    width: 100%;
+    height: 70px;
+    overflow: auto;
+}
+
+.row-menu-welcome {
+    margin-right: 6px;
+    margin-left: 6px;
+}
+
+.left-menu-welcome {
+    background: #283753;
+
+
+}
+
+.card-custom {
+    margin-top: 3px;
+    margin-bottom: 3px;
+    display: flex;
+    justify-content: center;
+}
+
+.left-menu-welcome-button {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    margin: 12px 85px 12px 35px;
+    justify-content: left;
+
+}
+
+.first-welcome-left-button {
+    margin-top: 30px;
+    color: #283753;
+
+}
+
+.right-welcome-custom-menu{
+    background: #F1F1F1;
+}
+
+.div-first-btn-true{
+    border-bottom: white 1px solid;
+}
+.first-div{
+    border-top: white 1px solid;
+}
+
+.ico-main-menu{
+    margin-right: 20px;
+}
+
+.change-color-button{
+    background: #4A669A;
+}
+
+.profile-left{
+    margin: 30px 45px 100px 45px;
+    background: white;
+    border: #DEDEDE 0.1px solid;
+    border-radius: 0.25rem;
+}
+
+.custom-profile{
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.custom-profile-fio{
+    margin-left: 40px;
+
+}
+
+.return-button{
+
+}
+
+
+.class-block{
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+
+    border: #DEDEDE 1px solid;
+    border-radius: 0.25rem;
+
+
+}
+
+.input-custom{
+    margin-top: 5px;
+   width: 35%;
+    margin-left: 35%;
+    margin-bottom: 20px;
+}
+
+.custom-edit{
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border: #DEDEDE 1px solid;
+    border-radius: 0.25rem
+}
+
+.custom-button-quest{
+    display: block;
+    float: left;
+    width: 30px;
+    height: 30px;
+    font-size: 15px;
+    box-sizing: border-box;
+    border:1px solid midnightblue;
+    margin-bottom: 6px;
+    margin-right: 9px;
+    cursor:pointer;
+    text-align: center;
+    line-height: 26px;
+}
+
+.ce-block__content, .ce-toolbar__content { max-width:calc(100% - 80px) !important; } .cdx-block { max-width: 100% !important; }

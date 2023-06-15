@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание нового курса</title>
+</head>
+<body>
+<form th:method="POST" th:action="@{/course_create}" th:object="${new_course}" enctype="multipart/form-data">
+    <label for="name">Название курса:</label>
+    <input type="text" th:field="*{name}" id="name">
+    <br>
+    <label for="description">Описание курса:</label>
+    <input type="text" th:field="*{description}" id="description">
+    <br>
+
+
+
+
+
+    <input type="submit" value="sign up!">
+
+</form>
+</body>
+</html>

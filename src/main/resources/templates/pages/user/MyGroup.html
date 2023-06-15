@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="stylesheet" href="/css/fontello.css"/>
+</head>
+<body>
+<div class="container-fluid ">
+
+    <div th:replace="~{pages/user/welcome_page :: header(${user})}"></div>
+    <div class="row main-custom">
+
+        <div class="col-lg-2 left-menu-welcome">
+
+            <div sec:authorize="hasRole('STUDENT')">
+                <div class="first-welcome-left-button">
+                    fhg
+                </div>
+                <div class="div-first-btn-true first-div">
+                    <a class=" left-menu-welcome-button" th:href="@{/dashboard_student}"><i
+                            class="icon-tasks ico-main-menu" style="color: white"></i>Results</a>
+                </div>
+                <div class="div-first-btn-true">
+                    <a class=" left-menu-welcome-button" th:href="@{/show_all_courses_for_student}"><i
+                            class="icon-graduation-cap ico-main-menu" style="color: white"></i>All courses</a>
+                </div>
+                <div class="div-first-btn-true">
+                    <a class=" left-menu-welcome-button" th:href="@{/show_my_group}"><i
+                            class="icon-users ico-main-menu" style="color: white"></i>My group</a>
+                </div>
+                <div class="div-first-btn-true">
+                    <a class=" left-menu-welcome-button return-button" th:href="@{/welcome}"><i
+                            class="icon-left-thin ico-main-menu" style="color: white"></i>Return</a>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="col-lg-10 right-welcome-custom-menu">
+            <div style="margin: 10px 10px 10px 10px; border: #DEDEDE 1px solid; border-radius: 0.25rem">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="row">
+                            <div style="height: 30vh" class="col-12">
+                                <div style="margin: 10px 10px 10px 10px; border: #DEDEDE 1px solid; border-radius: 0.25rem; height: 95%; background: white">
+                                    <h3 style="margin-left: 13px; margin-top: 8px; margin-bottom: 15px"
+                                        th:text="'Group name: ' + ${group.name}"></h3>
+                                    <h4 style="margin-left: 15px; margin-top: 7px; margin-bottom: 7px"
+                                        th:text="'Course: '+ ${group.courseNumber}"></h4>
+                                    <h4 style="margin-left: 15px; margin-top: 7px; margin-bottom: 7px"
+                                        th:text="'Number of Student: '+ ${group.studentNumber}"></h4>
+                                    <hr style="margin-left: 11px; margin-right: 11px; margin-top: 37px; margin-bottom: 37px">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <h6 style="margin-left: 18px"
+                                                th:text="'Student name: ' + ${student.userStudent.firstName} + ' ' + ${student.userStudent.middleName}"></h6>
+                                        </div>
+                                        <div class="col-6">
+                                            <h6 style="margin-left: 10px; margin-top: 7px; margin-bottom: 7px"
+                                                th:text="'Personal student ID: '+ ${student.id}"></h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="height: 60vh" class="col-12">
+                                <div style="height: 95%; margin: 10px 10px 10px 10px; border: #DEDEDE 1px solid; border-radius: 0.25rem; background: white ">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <th>First name</th>
+                                            <th>Middle name</th>
+                                            <th>Email</th>
+                                            <th>Show details info</th>
+                                        </tr>
+                                        <tr th:each="student_t : ${group.students}">
+                                            <td><p th:text="${student_t.userStudent.firstName}">Show course</p></td>
+                                            <td><p th:text="${student_t.userStudent.middleName}">Show course</p></td>
+                                            <td><p th:text="${student_t.userStudent.email}">Show course</p></td>
+                                            <td><a class="dropdown-item" th:href="@{/showInfo/{id} (id = ${student_t.userStudent.id})}">Show</a></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="height: 90vh" class="col-6">
+                        <div style="margin: 10px 10px 10px 0px; height: 96%; border: #DEDEDE 1px solid; border-radius: 0.25rem; background: white">
+                            <table class="table table-striped">
+                                <tr>
+                                    <th>First name</th>
+                                    <th>Middle name</th>
+                                    <th>Position</th>
+                                    <th>Email</th>
+                                    <th>Number of courses</th>
+                                    <th>Show details info</th>
+                                </tr>
+                                <tr th:each="teacher : ${teachers}">
+                                    <td><p th:text="${teacher.userTeacher.firstName}">Show course</p></td>
+                                    <td><p th:text="${teacher.userTeacher.middleName}">Show course</p></td>
+                                    <td><p th:text="${teacher.position}">Show course</p></td>
+                                    <td><p th:text="${teacher.userTeacher.email}">Show course</p></td>
+                                    <td><p th:text="${teacher.courses.size}">Show course</p></td>
+                                    <td><a class="dropdown-item" th:href="@{/showInfo/{id} (id = ${teacher.userTeacher.id})}">Show</a></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="stylesheet" href="/css/fontello.css"/>
+    <style type="text/css">
+        div.chartWrapper {
+            position: relative;
+            overflow: auto;
+            width: 100%;
+        }
+
+        div.chartContainer {
+            position: relative;
+            height: 300px;
+        }
+
+        .width_custom {
+            width: [(${analiseTest.width + 'px'}) ];
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid ">
+
+    <div th:replace="~{pages/user/welcome_page :: header(${user})}"></div>
+    <div class="row main-custom">
+        <div class="col-lg-2 left-menu-welcome">
+            <div sec:authorize="hasRole('TEACHER')">
+                <div class="first-welcome-left-button"> s</div>
+
+                <div class="div-first-btn-true first-div">
+                    <a class=" left-menu-welcome-button" th:href="@{/show_info_courses}"><i
+                            class="icon-graduation-cap ico-main-menu" style="color: white"></i>Show courses</a>
+                </div>
+                <div class="div-first-btn-true ">
+                    <a class=" left-menu-welcome-button" th:href="@{/analise}">
+                        <i class="icon-chart-bar ico-main-menu" style="color: white"></i>Analysis</a>
+                </div>
+                <div class="div-first-btn-true ">
+                    <a class=" left-menu-welcome-button" th:href="@{/statics}">
+                        <i class="icon-tasks ico-main-menu" style="color: white"></i>Statistics</a>
+                </div>
+                <div class="div-first-btn-true">
+                    <a class=" left-menu-welcome-button return-button" th:href="@{/welcome}"><i
+                            class="icon-left-thin ico-main-menu" style="color: white"></i>Return</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div th:if="${analiseTest.test.resultTest.size != 0}" class="col-lg-10 right-welcome-custom-menu">
+            <h2 style="margin-left: 5px; margin-top: 2px; margin-bottom: 2px; ">Test analysis</h2>
+            <hr style=" margin-bottom: 5px; margin-top: 5px; margin-left: 10px; margin-right: 10px">
+            <div class="row">
+                <div class="col-6">
+                    <div style="margin: 10px 10px 10px 10px; border: #DEDEDE 1px solid; border-radius: 0.25rem; background: white ">
+                        <div>
+                            <h3>1. Score</h3>
+
+                            <canvas id="myChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div style="margin: 10px 10px 10px 10px; border: #DEDEDE 1px solid; border-radius: 0.25rem; background: white ">
+                        <div>
+                            <h3>2. Passage</h3>
+                            <canvas id="myChart1"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div style="margin: 10px 10px 10px 10px; border: #DEDEDE 1px solid; border-radius: 0.25rem; background: white ">
+                        <div>
+                            <h3>3. Complexity of issues</h3>
+                            <h4>Number of all students [[${analiseTest.allStudentsSize}]]</h4>
+                            <div style="width: 100%; overflow-x: auto;">
+                                <div class="width_custom" style=" height: 365px">
+                                    <canvas id="myChart2" height="300" width="0"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div style="margin: 10px 10px 10px 10px; border: #DEDEDE 1px solid; border-radius: 0.25rem; background: white; height: 440px; ">
+                        <div style="margin: 10px 10px 10px 10px; border: #DEDEDE 1px solid; border-radius: 0.25rem; background: white ">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h3> Best Student: </h3>
+                                </div>
+                                <div class="col-6">
+                                    <a style="margin-top: 7px;" class="btn btn-primary change-color-button"
+                                       th:href="@{/result_test_page/{id} (id = ${analiseTest.bestStudent.id})}"
+                                       th:text="'Check'"></a>
+                                </div>
+                            </div>
+                            <hr>
+                            <p style="margin-left: 9px; margin-top: -10px;"
+                               th:text="'Name: ' + ${analiseTest.bestStudent.student.userStudent.firstName} + ' ' +  ${analiseTest.bestStudent.student.userStudent.middleName}"></p>
+                            <p style="margin-left: 9px; margin-top: -10px;"
+                               th:text="'Time: ' + ${analiseTest.time}"></p>
+                            <p style="margin-left: 9px; margin-top: -10px; "
+                               th:text="'Score: ' + ${analiseTest.bestStudent.testRating}"></p>
+                            <p style="margin-left: 9px; margin-top: -10px; "
+                               th:text="'Group: ' + ${analiseTest.bestStudent.student.studentGroup.name} + '     Course: ' + ${analiseTest.bestStudent.student.studentGroup.courseNumber}"></p>
+                        </div>
+                        <div style="margin: 10px 10px 10px 10px; border: #DEDEDE 1px solid; border-radius: 0.25rem; background: white ">
+                            <div class="row">
+                                <div class="col-3"><p style="margin-top: 7px; margin-left: 7px">Висновок:</p>
+                                </div>
+                                <div class="col-9">
+                                    <a style="margin-top: 2px;" class="btn btn-primary change-color-button" id="1S" href="#">1. Score</a>
+                                    <a style="margin-top: 2px;" class="btn btn-primary change-color-button" id="2S" href="#">2. Passage</a>
+                                    <a style="margin-top: 2px;" class="btn btn-primary change-color-button" id="3S" href="#">3. Complexity of
+                                        issues</a>
+                                </div>
+                            </div>
+                            <div style="margin: 4px 4px 4px 4px; border: #DEDEDE 1px solid; border-radius: 0.25rem; background: white ">
+                                <div id="1Sa">
+                                    <p style="margin-left: 2px; margin-top: 2px;" th:text="${analiseTest.synopsisByScore}"></p>
+                                </div>
+                                <div id="2Sa" style="display: none">
+                                    <p style="margin-left: 2px; margin-top: 2px;" th:text="${analiseTest.synopsisByPassage}"></p>
+                                </div>
+                                <div id="3Sa" style="display:none;">
+                                    <p style="margin-left: 2px; margin-top: 2px;" th:text="${analiseTest.synopsisByComplexityOfIssues}"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:unless="${analiseTest.test.resultTest.size != 0}" class="col-lg-10 right-welcome-custom-menu">
+            <div style="margin-left: 70vh; margin-top: 41vh">
+                <p>TEST RESULT IS EMPTY</p>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</body>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    let but1 = document.getElementById("1S");
+    let but2 = document.getElementById("2S");
+    let but3 = document.getElementById("3S");
+
+    let divS1 = document.getElementById("1Sa");
+    let divS2 = document.getElementById("2Sa");
+    let divS3 = document.getElementById("3Sa");
+
+
+    but1.addEventListener('click', function () {
+        divS1.style.display = "block";
+        divS2.style.display = "none";
+        divS3.style.display = "none";
+    })
+    but2.addEventListener('click', function () {
+        divS1.style.display = "none";
+        divS2.style.display = "block";
+        divS3.style.display = "none";
+    })
+    but3.addEventListener('click', function () {
+        divS1.style.display = "none";
+        divS2.style.display = "none";
+        divS3.style.display = "block";
+    })
+
+
+</script>
+<script>
+    const ctx = document.getElementById('myChart');
+    const a =
+        [
+            [[${analiseTest.lessF}]],
+            [[${analiseTest.betweenE}]],
+            [[${analiseTest.betweenD}]],
+            [[${analiseTest.betweenC}]],
+            [[${analiseTest.betweenB}]],
+            [[${analiseTest.betweenA}]]
+        ];
+    const b =
+        [
+            [[${analiseTest.DidNotStart}]],
+            [[${analiseTest.DidNotPass}]],
+            [[${analiseTest.Passed}]]
+
+        ];
+
+
+    let c = [];
+    let questSize = [[${analiseTest.test.quests.size}]];
+
+    for (let i = 0; i < questSize; i++) {
+        c.push(i + 1);
+    }
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['<60 (F)', '60-64 (E)', '64-69 (D)', '70-84 (C)', '84-89 (B)', '90-100 (A)'],
+            datasets: [{
+                label: '# of Votes',
+                data: a,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    const ctx1 = document.getElementById('myChart1');
+    new Chart(ctx1, {
+        type: 'bar',
+        data: {
+            labels: ['Did not start', 'Did not pass', 'Passed'],
+            datasets: [{
+                label: '# of Votes',
+                data: b,
+                backgroundColor: [
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(75, 192, 192, 0.2)'
+                ],
+                borderColor: [
+                    'rgb(255, 159, 64)',
+                    'rgb(255, 99, 132)',
+                    'rgb(75, 192, 192)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    let asd = [[${analiseTest.counterNonTrueQuest}]];
+    const ctx2 = document.getElementById('myChart2');
+    new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: c,
+            datasets: [{
+                label: '# of Votes',
+                data: asd,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>

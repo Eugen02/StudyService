@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Список курсов</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="stylesheet" href="/css/fontello.css"/>
+
+</head>
+<body>
+<div class="container-fluid ">
+    <div th:replace="~{pages/user/welcome_page :: header(${user})}"></div>
+    <div class="row main-custom">
+        <div class="col-lg-2 left-menu-welcome">
+            <div sec:authorize="hasRole('TEACHER')">
+                <div class="first-welcome-left-button"> s</div>
+
+                <div class="div-first-btn-true first-div">
+                    <a class=" left-menu-welcome-button" th:href="@{/show_info_courses}"><i
+                            class="icon-graduation-cap ico-main-menu" style="color: white"></i>Show courses</a>
+                </div>
+                <div class="div-first-btn-true ">
+                    <a class=" left-menu-welcome-button" th:href="@{/analise}">
+                        <i class="icon-chart-bar ico-main-menu" style="color: white"></i>Analysis</a>
+                </div>
+                <div class="div-first-btn-true ">
+                    <a class=" left-menu-welcome-button" th:href="@{/statics}">
+                        <i class="icon-tasks ico-main-menu" style="color: white"></i>Statistics</a>
+                </div>
+                <div class="div-first-btn-true">
+                    <a class=" left-menu-welcome-button return-button" th:href="@{/welcome}"><i
+                            class="icon-left-thin ico-main-menu" style="color: white"></i>Return</a>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-lg-10 right-welcome-custom-menu">
+            <div style="margin: 10px 10px 10px 10px; border: #DEDEDE 1px solid; border-radius: 0.25rem; background: white ">
+                <h2 style="margin-left: 5px; margin-top: 2px; margin-bottom: 3px; ">Courses</h2>
+                <hr style=" margin-bottom: 10px; margin-top: 10px; margin-left: 10px; margin-right: 10px">
+
+                <button type="button" class="btn btn-primary change-color-button"
+                        style="margin-left: 15px; margin-top: 30px; margin-bottom: 20px"
+                        data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Create course
+                </button>
+                <hr style=" margin-bottom: 10px; margin-top: 10px; margin-left: 10px; margin-right: 10px">
+
+                <table class="table table-striped">
+                    <tr>
+                        <th></th>
+                        <th>Course name</th>
+                        <th>Course edit</th>
+                        <th>Add/Remove group</th>
+                        <th>Check course</th>
+                        <th>Remove course</th>
+                    </tr>
+                    <tr th:each="course : ${courses}">
+                        <td><img th:src="'http://localhost:8000' + ${course.linkPage}" alt="" style="width: 340px; height: 150px"></td>
+                        <td th:text="${course.name}">Onions</td>
+                        <td><a style=" margin-top: 49.6px" class="btn btn-primary change-color-button"
+                               th:href="@{/course_edit/{id} (id=${course.id})}">Edit</a></td>
+                        <td><a style="margin-top: 49.6px" class="btn btn-primary change-color-button"
+                               th:href="@{/course_group_edit/{id} (id=${course.id})}">Add/Remove</a></td>
+                        <td><a style=" margin-top: 49.6px"  class="btn btn-primary change-color-button"
+                               th:href="@{/get_course_view_student/{id} (id = ${course.id})}">View</a></td>
+                        <td>
+                            <form th:method="DELETE" th:action="@{/remove_course/{id}(id=${course.getId()})}">
+                                <input style=" margin-top: 49.6px" class="btn btn-primary change-color-button" type="submit" value="Remove"/>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${courses.size} == 0">
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                </table>
+
+
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Create new course</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form th:method="POST" th:action="@{/course_create}" th:object="${new_course}"
+                                  enctype="multipart/form-data">
+                            <div class="modal-body">
+                                <label style="margin-top: 15px" for="name">Course name:</label>
+                                <input style="margin-bottom: 10px" class="form-control" type="text" th:field="*{name}" id="name">
+
+                                <label style="margin-top: 10px" for="description">Course description:</label>
+                                <textarea class="form-control" placeholder="Leave a description here" th:field="*{description}" id="description" style="height: 100px; margin-bottom: 10px"></textarea>
+                                <label style="margin-top: 10px" for="file">Add image:</label>
+                                <input style="margin-bottom: 10px" class="form-control" id="file" type="file" name="file"/>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary change-color-button" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary change-color-button">Create</button>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</body>
+
+
+<script async>
+
+
+</script>
+</html>

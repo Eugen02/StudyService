@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="stylesheet" href="/css/fontello.css"/>
+</head>
+<body>
+<div class="container-fluid ">
+    <div th:replace="~{pages/user/welcome_page :: header(${user})}"></div>
+    <div class="row main-custom">
+        <div class="col-lg-2 left-menu-welcome">
+            <div sec:authorize="hasRole('TEACHER')">
+                <div class="first-welcome-left-button"> s</div>
+
+                <div class="div-first-btn-true first-div">
+                    <a class=" left-menu-welcome-button" th:href="@{/show_info_courses}"><i
+                            class="icon-graduation-cap ico-main-menu" style="color: white"></i>Show courses</a>
+                </div>
+                <div class="div-first-btn-true ">
+                    <a class=" left-menu-welcome-button" th:href="@{/analise}">
+                        <i class="icon-chart-bar ico-main-menu" style="color: white"></i>Analysis</a>
+                </div>
+                <div class="div-first-btn-true ">
+                    <a class=" left-menu-welcome-button" th:href="@{/statics}">
+                        <i class="icon-tasks ico-main-menu" style="color: white"></i>Statistics</a>
+                </div>
+                <div class="div-first-btn-true">
+                    <a class=" left-menu-welcome-button return-button" th:href="@{/welcome}"><i
+                            class="icon-left-thin ico-main-menu" style="color: white"></i>Return</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-10 right-welcome-custom-menu">
+            <div style="margin: 10px 10px 10px 10px; border: #DEDEDE 1px solid; border-radius: 0.25rem; background: white">
+                <h2 style="margin-left: 15px; margin-top: 15px; margin-bottom: 10px">Create new Lecture</h2>
+                <hr>
+                <form th:method="POST" th:action="@{/create_lecture_material/{id} (id=${selectedCourseBlock.id})}"
+                      th:object="${newLectureMaterial}">
+                    <label style="margin-left: 10px;" for="name">Lecture name:</label>
+                    <input style="width:500px; margin-left:10px ;margin-bottom: 10px;" class="form-control" type="text" th:field="*{name}" id="name">
+                    <br>
+                    <label style="margin-left: 10px;" for="editorjs">Text:</label>
+                    <div style="border: #DEDEDE 1px solid" id="editorjs"></div>
+
+                        <textarea style="display: none"  id="description" autocomplete="off" th:value="${newLectureMaterial.description}" th:name="description"></textarea>
+                    <input style="display: none" type="text" th:field="*{link}" id="link">
+                    <input style="display: none" type="text" th:field="*{nameVideo}" id="nameVideo">
+                    <br>
+
+                    <label style="margin-left: 10px;" for="file">Add video</label>
+                    <input style="width:500px; margin-left:10px ;margin-bottom: 10px;" class="form-control" id="file" type="file" name="file"/>
+
+                    <div style="display: flex; justify-content: center">
+                    <input   class="btn btn-primary change-color-button"  style="margin-top: 15px; margin-bottom: 15px" id="sub-btn" type="button" value="Create">
+                    </div>
+                    <input style="display: none" id="submit-button" type="submit" value="Create">
+
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="module">
+    import EditorJs from 'https://cdn.jsdelivr.net/npm/@editorjs/editorjs/+esm'
+    import Header from 'https://cdn.jsdelivr.net/npm/@editorjs/header/+esm';
+    import List from 'https://cdn.jsdelivr.net/npm/@editorjs/list/+esm';
+    import Embed from 'https://cdn.jsdelivr.net/npm/@editorjs/embed/+esm';
+
+    const editor = new EditorJs({
+        holderId: 'editorjs',
+
+        tools: {
+            header: {
+                class: Header,
+                inlineToolbar: ['link']
+            },
+            list: {
+                class: List,
+                inlineToolbar: ['link', 'bold']
+            },
+            embed: {
+                class: Embed,
+                inlineToolbar: false,
+                config: {
+                    services: {
+                        youtube: true,
+                        coub: true
+                    }
+                },
+            },
+        },
+    })
+
+    let saveBtn = document.getElementById("sub-btn");
+    // let saveBtn = document.getElementById("savebtn");
+    saveBtn.addEventListener('click', function () {
+        editor.save().then((outputData) => {
+            console.log('articcle data:', JSON.stringify(outputData.blocks));
+            let sad = JSON.stringify(outputData.blocks);
+            console.log('sad')
+            console.log(JSON.parse(sad));
+
+            document.getElementById("description").value = JSON.stringify(outputData.blocks);
+        });
+    })
+
+</script>
+<script type="module" th:inline="javascript">
+    import {initializeApp} from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyA7u9TjmIUmoYgTV-ie-B75JOiHUPy5VrU",
+        authDomain: "dpwork-9ad82.firebaseapp.com",
+        projectId: "dpwork-9ad82",
+        storageBucket: "dpwork-9ad82.appspot.com",
+        messagingSenderId: "1091388155949",
+        appId: "1:1091388155949:web:868faa1c2b2d1eb3b570a4",
+        measurementId: "G-ZW2SJDSYG4"
+    };
+
+    const app = initializeApp(firebaseConfig);
+
+    import {
+        getStorage,
+        ref as sRef,
+        deleteObject,
+        uploadBytesResumable,
+        getDownloadURL
+    } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-storage.js";
+    //          variables
+
+    var files = [];
+
+    var upBtn = document.getElementById("sub-btn");
+    var video_tag_link = document.getElementById("link");
+    var video_tag_name = document.getElementById("nameVideo");
+    var submitButton = document.getElementById("submit-button");
+
+    var input = document.getElementById("file");
+
+    input.onchange = e => {
+        files = e.target.files;
+    }
+
+    // upload
+
+    async function UploadProcess() {
+        if( document.getElementById("file").value == ''){
+            submitButton.click();
+            return;
+        }
+        var ImgToUpload = files[0];
+        var ImgName = files[0].name;
+        console.log('ImgName');
+        console.log(ImgName);
+        const storage1 = getStorage(app);
+        const desertRef = sRef(storage1, "videos/" + ImgName);
+        deleteObject(desertRef).then(() => {
+        }).catch((error) => {
+        });
+
+
+        video_tag_name.value = files[0].name;
+        const metaData = {
+            contentType: ImgToUpload.type
+        }
+        console.log("111111")
+        const storage = getStorage(app);
+        const storageRef = sRef(storage, "videos/" + ImgName);
+        const UploadTask = uploadBytesResumable(storageRef, ImgToUpload, metaData);
+        console.log("111111")
+        UploadTask.on('state-changed', () => {
+            }, (error) => {
+                alert("error")
+            },
+            () => {
+                getDownloadURL(UploadTask.snapshot.ref).then((downloadURL) => {
+                    console.log("downloadURL");
+                    console.log(downloadURL);
+                    video_tag_link.value = downloadURL;
+                    submitButton.click();
+
+                });
+            });
+
+    }
+
+    upBtn.onclick = UploadProcess;
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</body>
+</html>

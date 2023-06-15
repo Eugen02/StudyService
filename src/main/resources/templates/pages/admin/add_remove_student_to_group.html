@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Adding a student</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="stylesheet" href="/css/fontello.css"/>
+</head>
+<body>
+<div class="container-fluid ">
+    <div th:replace="~{pages/user/welcome_page :: header(${user})}"></div>
+    <div class="row main-custom">
+        <div class="col-lg-2 left-menu-welcome">
+
+            <div sec:authorize="hasRole('ADMIN')">
+                <div class="first-welcome-left-button"> s</div>
+
+                <div class="div-first-btn-true first-div">
+                    <a class=" left-menu-welcome-button" th:href="@{/statics_admin}">
+                        <i class="icon-tasks ico-main-menu" style="color: white"></i>Statistics</a>
+                </div>
+                <div class="div-first-btn-true ">
+                    <a class=" left-menu-welcome-button" th:href="@{/redact_users}">
+                        <i class="icon-users ico-main-menu" style="color: white"></i>Show users</a>
+                </div>
+                <div class="div-first-btn-true ">
+                    <a class=" left-menu-welcome-button" th:href="@{/redact_group}">
+                        <i class="icon-users ico-main-menu" style="color: white"></i>Show groups</a>
+                </div>
+                <div class="div-first-btn-true">
+                    <a class=" left-menu-welcome-button return-button" th:href="@{/welcome}"><i
+                            class="icon-left-thin ico-main-menu" style="color: white"></i>Return</a>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-lg-10 right-welcome-custom-menu">
+            <div class="row">
+                <div class="col-12" style="height: 50vh;">
+                    <h1>Current students in the group:</h1>
+                    <table class="table table-striped ">
+                        <tr>
+                            <th>First name</th>
+                            <th>Middle name</th>
+                            <th>Last name</th>
+                            <th>Email</th>
+                            <th>Delete</th>
+                        </tr>
+                        <tr th:each="userInG : ${usersInGroup}">
+                            <td th:text="${userInG.firstName}">Onions</td>
+                            <td th:text="${userInG.lastName}">2.41</td>
+                            <td th:text="${userInG.middleName}">2.41</td>
+                            <td th:text="${userInG.email}">2.41</td>
+                            <td><a class="btn btn-primary change-color-button"
+                                   th:href="@{'/group_edit_remove/'+ ${userInG.id} + '?idg=' + ${groupWhoEdit.id}}">Delete</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${usersInGroup.size} == 0">
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-12">
+                    <h1>Students on the addendum:</h1>
+
+                    <table class="table table-striped">
+                        <tr>
+                            <th>First name</th>
+                            <th>Middle name</th>
+                            <th>Last name</th>
+                            <th>Email</th>
+                            <th>Add</th>
+                        </tr>
+                        <tr th:each="userW : ${usersWhoAdd}">
+                            <td th:text="${userW.firstName}">Onions</td>
+                            <td th:text="${userW.lastName}">2.41</td>
+                            <td th:text="${userW.middleName}">2.41</td>
+                            <td th:text="${userW.email}">2.41</td>
+                            <td>
+                                <a class="btn btn-primary change-color-button"
+                                   th:href="@{'/group_edit_add/' + ${userW.id} + '?idg=' + ${groupWhoEdit.id}}">Add</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${usersWhoAdd.size} == 0">
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</body>
+</html>

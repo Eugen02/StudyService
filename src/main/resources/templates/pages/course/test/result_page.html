@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="stylesheet" href="/css/fontello.css"/>
+</head>
+<body>
+<div class="container-fluid ">
+    <div th:replace="~{pages/user/welcome_page :: header(${user})}"></div>
+    <div class="row main-custom">
+
+        <div class="col-lg-2 left-menu-welcome">
+            <div sec:authorize="hasRole('ADMIN')">
+                <div class="first-welcome-left-button"> s</div>
+
+                <div class="div-first-btn-true first-div">
+                    <a class=" left-menu-welcome-button" th:href="@{/statics_admin}">
+                        <i class="icon-tasks ico-main-menu" style="color: white"></i>Statistics</a>
+                </div>
+                <div class="div-first-btn-true ">
+                    <a class=" left-menu-welcome-button" th:href="@{/redact_users}">
+                        <i class="icon-users ico-main-menu" style="color: white"></i>Show users</a>
+                </div>
+                <div class="div-first-btn-true ">
+                    <a class=" left-menu-welcome-button" th:href="@{/redact_group}">
+                        <i class="icon-users ico-main-menu" style="color: white"></i>Show groups</a>
+                </div>
+                <div class="div-first-btn-true">
+                    <a class=" left-menu-welcome-button return-button" th:href="@{/welcome}"><i
+                            class="icon-left-thin ico-main-menu" style="color: white"></i>Return</a>
+                </div>
+            </div>
+            <div sec:authorize="hasRole('STUDENT')">
+                <div class="first-welcome-left-button">
+                    fhg
+                </div>
+                <div class="div-first-btn-true first-div">
+                    <a class=" left-menu-welcome-button" th:href="@{/dashboard_student}"><i
+                            class="icon-tasks ico-main-menu" style="color: white"></i>Results</a>
+                </div>
+                <div class="div-first-btn-true">
+                    <a class=" left-menu-welcome-button" th:href="@{/show_all_courses_for_student}"><i
+                            class="icon-graduation-cap ico-main-menu" style="color: white"></i>All courses</a>
+                </div>
+                <div class="div-first-btn-true">
+                    <a class=" left-menu-welcome-button" th:href="@{/show_my_group}"><i
+                            class="icon-users ico-main-menu" style="color: white"></i>My group</a>
+                </div>
+                <div class="div-first-btn-true">
+                    <a class=" left-menu-welcome-button return-button"
+                       th:href="@{/get_course_view_student/{id} (id = ${testTake.test.courseTest.id})}"><i
+                            class="icon-left-thin ico-main-menu" style="color: white"></i>Return</a>
+                </div>
+            </div>
+            <div sec:authorize="hasRole('TEACHER')">
+                <div class="first-welcome-left-button"> s</div>
+
+                <div class="div-first-btn-true first-div">
+                    <a class=" left-menu-welcome-button" th:href="@{/show_info_courses}"><i
+                            class="icon-graduation-cap ico-main-menu" style="color: white"></i>Show courses</a>
+                </div>
+                <div class="div-first-btn-true ">
+                    <a class=" left-menu-welcome-button" th:href="@{/analise}">
+                        <i class="icon-chart-bar ico-main-menu" style="color: white"></i>Analysis</a>
+                </div>
+                <div class="div-first-btn-true ">
+                    <a class=" left-menu-welcome-button" th:href="@{/statics}">
+                        <i class="icon-tasks ico-main-menu" style="color: white"></i>Statistics</a>
+                </div>
+                <div class="div-first-btn-true">
+                    <a class=" left-menu-welcome-button return-button"
+                       th:href="@{/course_edit/{id} (id=${course.id})}"><i
+                            class="icon-left-thin ico-main-menu" style="color: white"></i>Return</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-10 right-welcome-custom-menu">
+            <div style="margin: 10px 10px 10px 10px; border: #DEDEDE 1px solid; border-radius: 0.25rem; background: white">
+
+
+                <h3    style="display: flex; justify-content: center; margin-top: 30px; margin-bottom: 80px"        th:text="'Test name: ' + ${testTake.test.name}"></h3>
+                <p  style="display: flex; justify-content: center; margin-top: 5px; margin-bottom: 5px"  th:text="'Score: ' + ${testTake.resultTest.testRating}"></p>
+                <p  style="display: flex; justify-content: center; margin-top: 5px; margin-bottom: 5px"  th:text="'Time: ' + ${testTake.time}"></p>
+                <p style="display: flex; justify-content: center; margin-top: 5px; margin-bottom: 5px"
+                   th:text="'Correct answers: ' +  ${testTake.correctAnswersAll} +  ' / ' + ${testTake.test.quests.size}"></p>
+                <div sec:authorize="hasRole('STUDENT')">
+                    <p style="display: flex; justify-content: center; margin-top: 5px; margin-bottom: 5px" th:text="'Attempts: ' + ${testTake.resultTest.currentAttempt}"></p>
+
+                    <a class="btn btn-primary change-color-button" style="display: flex; justify-content: center; margin-top: 40px; margin-bottom: 40px; margin-left: 600px; margin-right: 600px"
+                       th:href="@{/get_course_view_student/{id} (id = ${testTake.test.courseTest.id})}">Return to course</a>
+                </div>
+                <p class="fw-bold" style="margin-left: 150px; margin-top: 30px; margin-bottom: 10px">Answers</p>
+                <div style="margin-left: 150px; margin-right: 150px; margin-top: 5px; margin-bottom: 5px; border: #DEDEDE 1px solid; border-radius: 0.25rem" th:each="completeT, itemStat : ${testTake.completeTest}">
+
+                    <p style="margin-left: 15px; margin-top: 10px; margin-bottom: 15px"   th:text="'Quest: ' + ${completeT.quest.description}"></p>
+
+                    <div style="margin-left: 30px;" th:if="${completeT.answerList[0].id} == ${testTake.resultTest.resultAnswers[__${itemStat.index}__].answerValueId}">
+                        <p th:if="${testTake.resultTest.resultAnswers[__${itemStat.index}__].corectAnswer} == '1'"
+                           style="color:green;" th:text="'A. ' +${completeT.answerList[0].answer}"></p>
+                        <p th:if="${testTake.resultTest.resultAnswers[__${itemStat.index}__].corectAnswer} == '0'"
+                           style="color:red;" th:text="'A. ' +${completeT.answerList[0].answer}"></p>
+                    </div>
+                    <div style="margin-left: 30px;" th:unless="${completeT.answerList[0].id} == ${testTake.resultTest.resultAnswers[__${itemStat.index}__].answerValueId}">
+                        <p th:text="'A. ' +${completeT.answerList[0].answer}"></p>
+                    </div>
+
+                    <div style="margin-left: 30px;" th:if="${completeT.answerList[1].id} == ${testTake.resultTest.resultAnswers[__${itemStat.index}__].answerValueId}">
+                        <p th:if="${testTake.resultTest.resultAnswers[__${itemStat.index}__].corectAnswer} == '1'"
+                           style="color:green;" th:text="'B. ' +${completeT.answerList[1].answer}"></p>
+                        <p th:if="${testTake.resultTest.resultAnswers[__${itemStat.index}__].corectAnswer} == '0'"
+                           style="color:red;" th:text="'B. ' +${completeT.answerList[1].answer}"></p>
+                    </div>
+                    <div style="margin-left: 30px;" th:unless="${completeT.answerList[1].id} == ${testTake.resultTest.resultAnswers[__${itemStat.index}__].answerValueId}">
+                        <p th:text="'B. ' +${completeT.answerList[1].answer}"></p>
+                    </div>
+
+                    <div style="margin-left: 30px;" th:if="${completeT.answerList[2].id} == ${testTake.resultTest.resultAnswers[__${itemStat.index}__].answerValueId}">
+                        <p th:if="${testTake.resultTest.resultAnswers[__${itemStat.index}__].corectAnswer} == '1'"
+                           style="color:green;" th:text="'C. ' +${completeT.answerList[2].answer}"></p>
+                        <p th:if="${testTake.resultTest.resultAnswers[__${itemStat.index}__].corectAnswer} == '0'"
+                           style="color:red;" th:text="'C. ' +${completeT.answerList[2].answer}"></p>
+                    </div>
+                    <div style="margin-left: 30px;" th:unless="${completeT.answerList[2].id} == ${testTake.resultTest.resultAnswers[__${itemStat.index}__].answerValueId}">
+                        <p th:text="'C. ' +${completeT.answerList[2].answer}"></p>
+                    </div>
+
+                    <div style="margin-left: 30px;" th:if="${completeT.answerList[3].id} == ${testTake.resultTest.resultAnswers[__${itemStat.index}__].answerValueId}">
+                        <p th:if="${testTake.resultTest.resultAnswers[__${itemStat.index}__].corectAnswer} == '1'"
+                           style="color:green;" th:text="'D. ' +${completeT.answerList[3].answer}"></p>
+                        <p th:if="${testTake.resultTest.resultAnswers[__${itemStat.index}__].corectAnswer} == '0'"
+                           style="color:red;" th:text="'D. ' +${completeT.answerList[3].answer}"></p>
+                    </div>
+                    <div style="margin-left: 30px;" th:unless="${completeT.answerList[3].id} == ${testTake.resultTest.resultAnswers[__${itemStat.index}__].answerValueId}">
+                        <p th:text="'D. ' +${completeT.answerList[3].answer}"></p>
+                    </div>
+
+
+
+
+                    <div style="margin-left: 30px;" th:if="${completeT.answerList[0].id} == ${testTake.resultTest.resultAnswers[__${itemStat.index}__].answerValueId}">
+                        <label style="margin-left: 10px;" th:for="'ans1_1' +${completeT.answerList[0].id}">A</label>
+                        <input  checked th:id="'ans1_1' + ${completeT.answerList[0].id}" type="radio" th:value="${completeT.answerList[0].answer}" th:name="'q1'+ ${itemStat.index}" disabled>
+
+                    </div>
+                    <div style="margin-left: 30px;" th:unless="${completeT.answerList[0].id} == ${testTake.resultTest.resultAnswers[__${itemStat.index}__].answerValueId}">
+                        <label style="margin-left: 10px;" th:for="'ans1_2' +${completeT.answerList[0].id}">A</label>
+                        <input th:id="'ans1_2' + ${completeT.answerList[0].id}" type="radio" th:value="${completeT.answerList[0].answer}" th:name="'q1' + ${itemStat.index}" disabled>
+                    </div>
+
+
+                    <div style="margin-left: 30px;" th:if="${completeT.answerList[1].id} == ${testTake.resultTest.resultAnswers[__${itemStat.index}__].answerValueId}">
+                        <label style="margin-left: 10px;" th:for="'ans2_1' +${completeT.answerList[1].id}">B</label>
+                        <input  checked th:id="'ans2_1' + ${completeT.answerList[1].id}" type="radio" th:value="${completeT.answerList[1].answer}" th:name="'q1' + ${itemStat.index}" disabled>
+
+                    </div>
+                    <div style="margin-left: 30px;" th:unless="${completeT.answerList[1].id} == ${testTake.resultTest.resultAnswers[__${itemStat.index}__].answerValueId}">
+                        <label style="margin-left: 10px;" th:for="'ans2_2' +${completeT.answerList[1].id}">B</label>
+                        <input th:id="'ans2_2' + ${completeT.answerList[1].id}" type="radio" th:value="${completeT.answerList[1].answer}" th:name="'q1' + ${itemStat.index}" disabled>
+                    </div>
+
+
+                    <div style="margin-left: 30px;" th:if="${completeT.answerList[2].id} == ${testTake.resultTest.resultAnswers[__${itemStat.index}__].answerValueId}">
+                        <label style="margin-left: 10px;" th:for="'ans3_1' +${completeT.answerList[2].id}">C</label>
+                        <input  checked th:id="'ans3_1' + ${completeT.answerList[2].id}" type="radio" th:value="${completeT.answerList[2].answer}" th:name="'q1' + ${itemStat.index}" disabled>
+
+                    </div>
+                    <div style="margin-left: 30px;" th:unless="${completeT.answerList[2].id} == ${testTake.resultTest.resultAnswers[__${itemStat.index}__].answerValueId}">
+                        <label style="margin-left: 10px;" th:for="'ans3_2' +${completeT.answerList[2].id}">C</label>
+                        <input th:id="'ans3_2' + ${completeT.answerList[2].id}" type="radio" th:value="${completeT.answerList[2].answer}" th:name="'q1' + ${itemStat.index}" disabled>
+                    </div>
+
+
+                    <div style="margin-left: 30px;" th:if="${completeT.answerList[3].id} == ${testTake.resultTest.resultAnswers[__${itemStat.index}__].answerValueId}">
+                        <label style="margin-left: 10px;" th:for="'ans4_1' +${completeT.answerList[3].id}">D</label>
+                        <input  checked th:id="'ans4_1' + ${completeT.answerList[3].id}" type="radio" th:value="${completeT.answerList[3].answer}" th:name="'q1' + ${itemStat.index}" disabled>
+                    </div>
+                    <div style="margin-left: 30px;" th:unless="${completeT.answerList[3].id} == ${testTake.resultTest.resultAnswers[__${itemStat.index}__].answerValueId}">
+                        <label style="margin-left: 10px;" th:for="'ans4_2' +${completeT.answerList[3].id}">D</label>
+                        <input th:id="'ans4_2' + ${completeT.answerList[3].id}" type="radio" th:value="${completeT.answerList[3].answer}" th:name="'q1' + ${itemStat.index}" disabled>
+                    </div>
+
+
+
+
+
+                    <div  th:if="${completeT.answerList[0].id} == ${testTake.resultTest.resultAnswers[__${itemStat.index}__].answerValueId}">
+                        <p th:if="${testTake.resultTest.resultAnswers[__${itemStat.index}__].corectAnswer} == '1'"
+                           style="color:green; margin-left: 40px; margin-top: 10px" th:text="'Answer is true'"></p>
+                        <p th:if="${testTake.resultTest.resultAnswers[__${itemStat.index}__].corectAnswer} == '0'"
+                           style="color:red; margin-left: 40px; margin-top: 10px" th:text="'Answer is false'"></p>
+                    </div>
+
+                    <div  th:if="${completeT.answerList[1].id} == ${testTake.resultTest.resultAnswers[__${itemStat.index}__].answerValueId}">
+                        <p th:if="${testTake.resultTest.resultAnswers[__${itemStat.index}__].corectAnswer} == '1'"
+                           style="color:green; margin-left: 40px; margin-top: 10px" th:text="'Answer is true'"></p>
+                        <p th:if="${testTake.resultTest.resultAnswers[__${itemStat.index}__].corectAnswer} == '0'"
+                           style="color:red; margin-left: 40px; margin-top: 10px" th:text="'Answer is false'"></p>
+                    </div>
+
+
+                    <div  th:if="${completeT.answerList[2].id} == ${testTake.resultTest.resultAnswers[__${itemStat.index}__].answerValueId}">
+                        <p th:if="${testTake.resultTest.resultAnswers[__${itemStat.index}__].corectAnswer} == '1'"
+                           style="color:green; margin-left: 40px; margin-top: 10px" th:text="'Answer is true'"></p>
+                        <p th:if="${testTake.resultTest.resultAnswers[__${itemStat.index}__].corectAnswer} == '0'"
+                           style="color:red; margin-left: 40px; margin-top: 10px" th:text="'Answer is false'"></p>
+                    </div>
+
+
+                    <div  th:if="${completeT.answerList[3].id} == ${testTake.resultTest.resultAnswers[__${itemStat.index}__].answerValueId}">
+                        <p th:if="${testTake.resultTest.resultAnswers[__${itemStat.index}__].corectAnswer} == '1'"
+                           style="color:green; margin-left: 40px; margin-top: 10px" th:text="'Answer is true'"></p>
+                        <p th:if="${testTake.resultTest.resultAnswers[__${itemStat.index}__].corectAnswer} == '0'"
+                           style="color:red; margin-left: 40px; margin-top: 10px" th:text="'Answer is false'"></p>
+                    </div>
+
+                    <div  style="margin-left: 40px; margin-top: 10px" class="fw-bold" th:if="'0' == ${testTake.resultTest.resultAnswers[__${itemStat.index}__].answerValueId}">
+                        <p th:text="'Answer is null'"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

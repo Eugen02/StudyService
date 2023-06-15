@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${lectureMaterial.name}"></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="stylesheet" href="/css/fontello.css"/>
+</head>
+<body>
+<div class="container-fluid ">
+    <div th:replace="~{pages/user/welcome_page :: header(${user})}"></div>
+    <div class="row main-custom">
+
+        <div class="col-lg-2 left-menu-welcome">
+
+            <div sec:authorize="hasRole('TEACHER')">
+                <div class="first-welcome-left-button"> s</div>
+
+                <div class="div-first-btn-true first-div">
+                    <a class=" left-menu-welcome-button" th:href="@{/show_info_courses}"><i
+                            class="icon-graduation-cap ico-main-menu" style="color: white"></i>Show courses</a>
+                </div>
+                <div class="div-first-btn-true ">
+                    <a class=" left-menu-welcome-button" th:href="@{/analise}">
+                        <i class="icon-chart-bar ico-main-menu" style="color: white"></i>Analysis</a>
+                </div>
+                <div class="div-first-btn-true ">
+                    <a class=" left-menu-welcome-button" th:href="@{/statics}">
+                        <i class="icon-tasks ico-main-menu" style="color: white"></i>Statistics</a>
+                </div>
+                <div class="div-first-btn-true">
+                    <a class=" left-menu-welcome-button return-button" th:href="@{/welcome}"><i
+                            class="icon-left-thin ico-main-menu" style="color: white"></i>Return</a>
+                </div>
+            </div>
+
+
+            <div sec:authorize="hasRole('STUDENT')">
+                <div class="first-welcome-left-button">
+                    fhg
+                </div>
+                <div class="div-first-btn-true first-div">
+                    <a class=" left-menu-welcome-button" th:href="@{/dashboard_student}"><i
+                            class="icon-tasks ico-main-menu" style="color: white"></i>Results</a>
+                </div>
+                <div class="div-first-btn-true">
+                    <a class=" left-menu-welcome-button" th:href="@{/show_all_courses_for_student}"><i
+                            class="icon-graduation-cap ico-main-menu" style="color: white"></i>All courses</a>
+                </div>
+                <div class="div-first-btn-true">
+                    <a class=" left-menu-welcome-button" th:href="@{/show_my_group}"><i
+                            class="icon-users ico-main-menu" style="color: white"></i>My group</a>
+                </div>
+                <div class="div-first-btn-true">
+                    <a class=" left-menu-welcome-button return-button"
+                       th:href="@{/get_course_view_student/{id} (id = ${lectureMaterial.lectureMaterialToCourseBlock.courseCourseBlock.id})}"><i
+                            class="icon-left-thin ico-main-menu" style="color: white"></i>Return</a>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="col-lg-10 right-welcome-custom-menu">
+            <div style="margin: 10px 10px 10px 10px; border: #DEDEDE 1px solid; border-radius: 0.25rem; background: white">
+                <h2 class="fw-bolder" style="display: flex; justify-content: center; margin-top: 5px; margin-bottom: 10px">Name: [[${lectureMaterial.name}]]</h2>
+                <hr style="margin-bottom: 10px; margin-top: 10px;">
+                <div id="editorjs"></div>
+                <textarea style="display: none" id="descripton" autocomplete="off"
+                          th:value="${lectureMaterial.description}"
+                          th:name="description">[[${lectureMaterial.description}]]</textarea>
+                <hr style="margin-bottom: 10px; margin-top: 10px;">
+                <div style="display:flex; justify-content: center" th:unless="${lectureMaterial.link == '#'} or ${lectureMaterial.link == ''} or ${lectureMaterial.link == null}">
+
+                    <video style="display: flex; justify-content: center; margin-bottom: 10px;" width="550" height="450" controls="controls">
+                        <source th:src="${lectureMaterial.link}" type="video/mp4">
+                    </video>
+                </div>
+
+                <hr style="margin-bottom: 10px; margin-top: 10px;">
+                <div style="display: flex; justify-content: center" >
+
+                    <div sec:authorize="hasRole('STUDENT')">
+                        <form th:if="${resultLecture == null}" th:method="POST" th:action="@{/lecture_checkd_s/{id}(id=${lectureMaterial.id})}">
+                    <input  style="margin-bottom:10px; margin-top: 10px " class="btn btn-primary change-color-button" id="lecture_check" type="submit"   value="Done"/>
+
+                </form>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: center" >
+                <input style="margin-bottom:10px; margin-top: 10px " th:if="${resultLecture != null}" disabled  class="btn btn-primary change-color-button" id="a" type="submit"   value="Already completed"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</body>
+</html>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs/dist/editor.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/header/dist/bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/list/dist/bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/embed/dist/bundle.min.js"></script>
+<script>
+
+
+    let jso = JSON.parse(document.getElementById('descripton').value);
+
+    const editorsJS = new EditorJS({
+        holderId: 'editorjs',
+        readOnly: true,
+        tools: {
+            header: {
+                class: Header,
+                inlineToolbar: ['link']
+            },
+            list: {
+                class: List,
+                inlineToolbar: ['link', 'bold']
+            },
+            embed: {
+                class: Embed,
+                inlineToolbar: false,
+                config: {
+                    services: {
+                        youtube: true,
+                        coub: true
+                    }
+                },
+            },
+        },
+        data: {blocks: jso}
+
+    });
+
+</script>
+
+

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание группы </title>
+</head>
+<body>
+<form th:method="POST" th:action="@{/newGroup}" th:object="${group}">
+    <label for="name">Введите название группы:</label>
+    <input type="text" th:field="*{name}" id="name">
+    <br>
+    <label for="numberCourse">Введите курс группы:</label>
+    <input type="text" th:field="*{courseNumber}" id="numberCourse">
+    <br>
+
+    <input type="submit" value="Создать!">
+
+</form>
+</body>
+</html>
